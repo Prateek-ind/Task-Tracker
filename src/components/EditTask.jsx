@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const AddTask = ({ tasksList, setTasksList }) => {
-  const [addModal, setAddModal] = useState(false);
+const EditTask = ({ task, tasksList, index, setTasksList }) => {
+  const [editModal, setEditModal] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
+
+  useEffect(() => {
+    setProjectName(task.projectName);
+    setTaskDescription(task.taskDescription);
+  }, []);
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -11,29 +16,25 @@ const AddTask = ({ tasksList, setTasksList }) => {
     if (name === "taskDescription") setTaskDescription(value);
   };
 
-  const handleAdd = (e) => {
+  const handleUpdate = (e) => {
     e.preventDefault();
-    setTasksList([
-      ...tasksList,
-      { id: Date.now(), projectName, taskDescription },
-    ]);
-    setAddModal(false);
-    setProjectName("");
-    setTaskDescription("");
+    let updatedTask = tasksList.map((t) => {
+      return t.id === task.id ? { ...t, projectName, taskDescription } : t;
+    });
+    setTasksList(updatedTask);
+    setEditModal(false);
   };
 
   return (
     <>
       <button
-        className="bg-blue-500 text-white 
-      uppercase font-semibold text-sm 
-      py-1 mx-1.5 pr-2.5 rounded 
-      hover:opacity-70 cursor-pointer"
-        onClick={() => setAddModal(true)}
+        className="bg-slate-400 text-white text-sm uppercase px-3
+       py-1.5 font-semibold rounded-lg hover:bg-slate-600"
+        onClick={() => setEditModal(true)}
       >
-        + New
+        Edit
       </button>
-      {addModal ? (
+      {editModal ? (
         <>
           <div
             className=" flex items-center justify-center
@@ -44,12 +45,12 @@ const AddTask = ({ tasksList, setTasksList }) => {
                 className=" flex flex-row justify-between
              p-5 bg-white border-b border-slate-200 rounded-t"
               >
-                <h3 className="text-3xl font-semibold">Add new task</h3>
+                <h3 className="text-3xl font-semibold">Edit task</h3>
 
                 <button
                   className="px-1 text-gray-400 float-right
             text-3xl leading-none font-semibold block"
-                  onClick={() => setAddModal(false)}
+                  onClick={() => setEditModal(false)}
                 >
                   X
                 </button>
@@ -102,9 +103,9 @@ const AddTask = ({ tasksList, setTasksList }) => {
                 <button
                   className="bg-blue-500 text-white uppercase 
                 rounded px-6 py-3 hover:opacity-70"
-                  onClick={handleAdd}
+                  onClick={handleUpdate}
                 >
-                  Add task
+                  Update task
                 </button>
               </div>
             </div>
@@ -115,4 +116,4 @@ const AddTask = ({ tasksList, setTasksList }) => {
   );
 };
 
-export default AddTask;
+export default EditTask;
