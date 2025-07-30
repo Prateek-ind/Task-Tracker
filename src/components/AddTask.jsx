@@ -4,22 +4,33 @@ const AddTask = ({ tasksList, setTasksList }) => {
   const [addModal, setAddModal] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    if (name === "projectName") setProjectName(value);
-    if (name === "taskDescription") setTaskDescription(value);
+    if (name === "projectName") {
+      setProjectName(value);
+      setErrorMessage("");
+    }
+
+    if (name === "taskDescription") {
+      setTaskDescription(value);
+    }
   };
 
   const handleAdd = (e) => {
     e.preventDefault();
-    setTasksList([
-      ...tasksList,
-      { id: Date.now(), projectName, taskDescription },
-    ]);
-    setAddModal(false);
-    setProjectName("");
-    setTaskDescription("");
+    if (!projectName) {
+      setErrorMessage("Enter a valid Project Name to continue");
+    } else {
+      setTasksList([
+        ...tasksList,
+        { id: Date.now(), projectName, taskDescription },
+      ]);
+      setAddModal(false);
+      setProjectName("");
+      setTaskDescription("");
+    }
   };
 
   return (
@@ -49,7 +60,10 @@ const AddTask = ({ tasksList, setTasksList }) => {
                 <button
                   className="px-1 text-gray-400 float-right
             text-3xl leading-none font-semibold block"
-                  onClick={() => setAddModal(false)}
+                  onClick={() => {
+                    setAddModal(false);
+                    setErrorMessage("");
+                  }}
                 >
                   X
                 </button>
@@ -72,8 +86,14 @@ const AddTask = ({ tasksList, setTasksList }) => {
                     onChange={handleInput}
                     className="w-full bg-gray-200 text-gray-700 
                 border-gray-200 rounded py-4 px-4 mb-5 
-                leading-tight focus:outline-none focus:bg-white"
+                leading-tight focus:outline-gray-200 focus:bg-white"
+                    required
                   />
+                  {errorMessage && (
+                    <p className="text-red-500 text-center text-sm">
+                      {errorMessage}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -94,7 +114,8 @@ const AddTask = ({ tasksList, setTasksList }) => {
                     onChange={handleInput}
                     className="w-full bg-gray-200 text-gray-700 
                 border-gray-200 rounded py-4 px-4 mb-5 
-                leading-tight focus:outline-none focus:bg-white"
+                leading-tight focus:outline-gray-200 focus:bg-white"
+                    required
                   />
                 </div>
               </form>
