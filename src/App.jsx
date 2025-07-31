@@ -23,10 +23,11 @@ export default function App() {
         <AddTask tasksList={tasksList} setTasksList={setTasksList} />
         <p className="text-xl ">to add new task</p>
       </div>
-      <div>
-        <p className="bg-slate-200 px-2 w-1/3 ml-4 rounded mt-4 leading-8">
+     <div className="flex flex-row">
+       <div className="w-full">
+        <h2 className="w-3/4 ml-6 max-w-lg bg-gray-200 px-4 py-2  rounded mt-4 leading-8">
           To Do:
-        </p>
+        </h2>
         {tasksList
           .slice(0)
           .reverse()
@@ -41,6 +42,13 @@ export default function App() {
             />
           ))}
       </div>
+      <div className="w-full">
+        <h2 className="w-3/4 ml-6 max-w-lg bg-gray-200 px-4 py-2  rounded mt-4 leading-8">
+          Completed Tasks
+        </h2>
+       
+      </div>
+     </div>
     </>
   );
 }
