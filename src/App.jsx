@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddTask from "./components/AddTask";
 import ToDo from "./components/ToDo";
-
+import { getTasks } from "./storage";
 export default function App() {
   const [tasksList, setTasksList] = useState([]);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  console.log(tasksList);
+  useEffect(() => {
+    setTasksList(getTasks());
+  }, []);
+
+  useEffect(() => {
+    if (!isInitialLoad) saveTasks(tasksList);
+  }, [tasksList]);
 
   return (
     <>
@@ -24,16 +31,14 @@ export default function App() {
           .slice(0)
           .reverse()
           .map((task, i) => (
-            <>
-              <ToDo
-                key={task.id}
-                task={task}
-                id={task.id}
-                index={i}
-                tasksList={tasksList}
-                setTasksList={setTasksList}
-              />
-            </>
+            <ToDo
+              key={task.id}
+              task={task}
+              id={task.id}
+              index={i}
+              tasksList={tasksList}
+              setTasksList={setTasksList}
+            />
           ))}
       </div>
     </>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { saveTasks } from "../storage.js";
 
 const EditTask = ({ task, tasksList, index, setTasksList }) => {
   const [editModal, setEditModal] = useState(false);
@@ -19,9 +20,12 @@ const EditTask = ({ task, tasksList, index, setTasksList }) => {
   const handleUpdate = (e) => {
     e.preventDefault();
     let updatedTask = tasksList.map((t) => {
-      return t.id === task.id ? { ...t, projectName, taskDescription } : t;
+      return t.id === task.id
+        ? { ...t, projectName, taskDescription, duration: t.duration }
+        : t;
     });
     setTasksList(updatedTask);
+    saveTasks(updatedTask);
     setEditModal(false);
   };
 

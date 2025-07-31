@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {  saveTasks } from "../storage.js";
 
 const AddTask = ({ tasksList, setTasksList }) => {
   const [addModal, setAddModal] = useState(false);
@@ -23,10 +24,16 @@ const AddTask = ({ tasksList, setTasksList }) => {
     if (!projectName) {
       setErrorMessage("Enter a valid Project Name to continue");
     } else {
-      setTasksList([
-        ...tasksList,
-        { id: Date.now(), projectName, taskDescription },
-      ]);
+      let newTask = {
+        id: Date.now(),
+        projectName,
+        taskDescription,
+        duration: 0,
+      };
+      const updatedList = [...tasksList, newTask];
+      setTasksList(updatedList);
+      saveTasks(updatedList);
+
       setAddModal(false);
       setProjectName("");
       setTaskDescription("");
@@ -97,7 +104,7 @@ const AddTask = ({ tasksList, setTasksList }) => {
                 </div>
                 <div>
                   <label
-                    htmlFor="project-name"
+                    htmlFor="task-description"
                     className="tracking-wide 
                     uppercase text-gray-700 text-xs 
                     font-semibold mb-2 block"
@@ -107,7 +114,7 @@ const AddTask = ({ tasksList, setTasksList }) => {
                   <textarea
                     type="text"
                     rows={4}
-                    id="project-name"
+                    id="task-description"
                     placeholder="Description"
                     name="taskDescription"
                     value={taskDescription}
