@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+import { getTasks, saveTasks } from "../storage";
 
-const Stopwatch = () => {
-  const [elapsedTime, setElapsedTime] = useState(0);
+const Stopwatch = ({ task, tasksList, setTasksList }) => {
+  const [elapsedTime, setElapsedTime] = useState(task.duration || 0);
   const [isRunning, setIsRunning] = useState(false);
   const startTimerRef = useRef(0);
   const timerIdRef = useRef();
@@ -25,12 +26,22 @@ const Stopwatch = () => {
   }
   function handlePause() {
     setIsRunning(false);
+    const updatedTask = tasksList.map((t) =>
+      t.id === task.id ? { ...t, duration: elapsedTime } : t
+    );
+    setTasksList(updatedTask);
+    saveTasks(updatedTask);
   }
 
-  function handleStop() {
+  function handleReset() {
     setIsRunning(false);
-    clearInterval(timerIdRef.current);
+    const updatedTask = tasksList.map((t) =>
+      t.id === task.id ? { ...t, duration: 0 } : t
+    );
+    setTasksList(updatedTask);
+    saveTasks(updatedTask);
     startTimerRef.current = 0;
+    clearInterval(timerIdRef.current);
     setElapsedTime(0);
   }
 
@@ -42,8 +53,9 @@ const Stopwatch = () => {
       "0"
     );
     let seconds = String(Math.floor(totalSeconds % 60)).padStart(2, "0");
-    console.log(hours, minutes, seconds);
-    return `${hours}:${minutes}:${seconds}`;
+    let time = `${hours}:${minutes}:${seconds}`;
+    console.log(time);
+    return time;
   }
 
   return (
@@ -57,9 +69,9 @@ const Stopwatch = () => {
       </button>
       <button
         className="bg-slate-100 px-4 py-2 rounded-lg uppercase font-semibold shadow-md hover:text-white hover:bg-blue-500"
-        onClick={handleStop}
+        onClick={handleReset}
       >
-        Stop
+        Reset
       </button>
     </div>
   );
