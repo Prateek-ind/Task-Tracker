@@ -60,15 +60,15 @@ const Stopwatch = ({ task, tasksList, setTasksList }) => {
 
   return (
     <div className="my-2 px-4 flex items-center justify-center flex-col md:flex-row gap-4">
-      <div className=" text-xl font-semibold">{handleTimer(elapsedTime)}</div>
+      <div className=" text-lg sm:text-xl font-semibold">{handleTimer(elapsedTime)}</div>
       <button
-        className="bg-slate-100 px-4 py-2 rounded-lg uppercase font-semibold shadow-md hover:text-white hover:bg-blue-500"
+        className="bg-slate-100 px-4 py-2 rounded-lg uppercase text-sm md:text-lg font-semibold shadow-md hover:text-white hover:bg-blue-500"
         onClick={isRunning ? handlePause : handleStart}
       >
         {isRunning ? "Pause" : "Start"}
       </button>
       <button
-        className="bg-slate-100 px-4 py-2 rounded-lg uppercase font-semibold shadow-md hover:text-white hover:bg-blue-500"
+        className="bg-slate-100 px-4 py-2 rounded-lg uppercase text-sm md:text-lg font-semibold shadow-md hover:text-white hover:bg-blue-500"
         onClick={handleReset}
       >
         Reset

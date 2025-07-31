@@ -32,7 +32,7 @@ const EditTask = ({ task, tasksList, index, setTasksList }) => {
   return (
     <>
       <button
-        className="bg-slate-400 text-white text-sm uppercase px-3
+        className="bg-slate-400 text-white text-sm md:text-lg uppercase px-3
        py-1.5 font-semibold rounded-lg hover:bg-slate-600"
         onClick={() => setEditModal(true)}
       >

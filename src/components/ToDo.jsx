@@ -17,9 +17,12 @@ const ToDo = ({ task, id, tasksList, index, setTasksList }) => {
   }
 
   return (
-    <div className="w-1/3 p-6 m-4 rounded border-slate-400 bg-white" ref={drag}>
+    <div
+      className="w-3/4 ml-6 max-w-lg bg-white px-4 py-2  rounded mt-4"
+      ref={drag}
+    >
       <div className="flex items-center justify-between my-2">
-        <p className="text-xl font-bold">{task.projectName}</p>
+        <p className="text-sm md:text-xl font-bold">{task.projectName}</p>
         <EditTask
           task={task}
           tasksList={tasksList}
@@ -27,7 +30,7 @@ const ToDo = ({ task, id, tasksList, index, setTasksList }) => {
           setTasksList={setTasksList}
         />
       </div>
-      <p className="my-2">{task.taskDescription}</p>
+      <p className="text-xs md:text-lg my-2">{task.taskDescription}</p>
       <Stopwatch
         task={task}
         tasksList={tasksList}
@@ -35,7 +38,7 @@ const ToDo = ({ task, id, tasksList, index, setTasksList }) => {
       />
       <div className="flex items-center justify-center mt-4">
         <button
-          className="bg-red-500 text-sm text-white uppercase
+          className="bg-red-500 text-white text-sm md:text-lg uppercase
          px-3 py-1.5 rounded-lg my-2 font-semibold  
          shadow-md hover:bg-red-700"
           onClick={() => handleDelete(task.id)}
