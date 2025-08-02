@@ -1,21 +1,37 @@
 import { useEffect, useState } from "react";
 import AddTask from "./components/AddTask";
 import ToDo from "./components/ToDo";
-import { getTasks, saveTasks } from "./storage";
+import {
+  getTasks,
+  saveTasks,
+  getCompletedTasks,
+  saveCompletedTasks,
+} from "./storage";
 import { useDrop } from "react-dnd";
 
 export default function App() {
   const [tasksList, setTasksList] = useState([]);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
   const [completed, setCompleted] = useState([]);
 
   useEffect(() => {
-    setTasksList(getTasks());
+    const storedTasks = getTasks();
+    const storedCompleted = getCompletedTasks();
+    if (storedTasks.length > 0) setTasksList(storedTasks);
+    if (storedCompleted.length > 0) setCompleted(storedCompleted);
   }, []);
 
   useEffect(() => {
-    if (!isInitialLoad) saveTasks(tasksList);
+    if (tasksList.length > 0) {
+      saveTasks(tasksList);
+    }
   }, [tasksList]);
+
+  useEffect(() => {
+    if (completed.length > 0) {
+      saveCompletedTasks(completed);
+    }
+  }, [completed]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "todo",
@@ -39,9 +55,11 @@ export default function App() {
     setCompleted((prev) => [...prev, completedTask]);
 
     // ✅ Remove from active tasks
-    const updatedTasks = tasksList.filter((task) => task.id !== id);
-    setTasksList(updatedTasks);
-    saveTasks(updatedTasks);
+    setTasksList((prevTasks) => {
+      const updatedTasks = prevTasks.filter((task) => task.id !== id);
+      saveTasks(updatedTasks);
+      return updatedTasks;
+    });
   }
 
   return (
